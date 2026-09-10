@@ -64,10 +64,13 @@ yourself. Suggested prompts cover risks and blockers, a status update and sprint
 done") and turns it into the same status / assignee / priority / due-date filters you can set by hand,
 so the result is transparent and editable as chips.
 
-Both run on the [Groq](https://groq.com) API from the browser. Copy `.env.example` to `.env.local` and
-set `VITE_GROQ_API_KEY` (and optionally `VITE_GROQ_MODEL`, default `openai/gpt-oss-120b`). Without a key
-the assistant explains what is missing and the AI filter button stays hidden. **The key ships in the
-client bundle** — fine for a local demo, not for anything public.
+Both run on the [Groq](https://groq.com) API through `api/chat.ts`, a serverless function that holds the
+key server-side and streams the response back — the browser only ever talks to `/api/chat`, so the key
+never reaches the client bundle. Copy `.env.example` to `.env.local` and set `GROQ_API_KEY` (optionally
+`GROQ_MODEL`, default `openai/gpt-oss-120b`); `npm run dev` serves the same endpoint through a Vite
+middleware, and on Vercel the values are project environment variables. `gpt-oss` models reason before
+they answer, so requests ask for hidden, low-effort reasoning. Without a key the assistant says what is
+missing and the AI filter button stays hidden.
 
 **Settings** — workspace (name, subdomain, icon), appearance, member list, export JSON and reset demo
 data. Per board: general (name, key, description, color), status editor (rename, recategorise, reorder,
@@ -94,6 +97,7 @@ audit log, imports, realtime sync, gantt/scheduler/calendar views, i18n, soft de
 ## Structure
 
 ```
+api/             serverless Groq proxy (chat + configured check), shared by `vercel dev` and Vite
 src/
 ├── components/
 │   ├── assistance/ ORIN launcher, panel, thread, composer, proposed-changes card

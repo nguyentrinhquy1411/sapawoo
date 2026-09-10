@@ -19,7 +19,7 @@ import { useCurrentBoardContext } from "@/components/assistance/use-board-contex
 import { useOrin } from "@/components/assistance/use-orin";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { isAiConfigured } from "@/lib/ai/groq";
+import { useAiConfigured } from "@/components/assistance/use-ai-configured";
 import { cn } from "@/lib/utils";
 import { useAssistantStore } from "@/store/use-assistant-store";
 
@@ -61,6 +61,7 @@ export function AssistanceThread({ showHistory = false, onClose, className, full
 	const setMode = useAssistantStore((state) => state.setMode);
 	const mode = useAssistantStore((state) => state.mode);
 	const [historyOpen, setHistoryOpen] = useState(false);
+	const aiReady = useAiConfigured();
 
 	const thread = threads.find((item) => item.id === activeThreadId);
 	const bottomRef = useRef<HTMLDivElement>(null);
@@ -194,9 +195,10 @@ export function AssistanceThread({ showHistory = false, onClose, className, full
 							<div ref={bottomRef} />
 						</div>
 
-						{!isAiConfigured() && (
+						{aiReady === false && (
 							<span className="shrink-0 border-t border-border bg-destructive/10 px-3 py-2 text-[11px] text-destructive">
-								Set VITE_GROQ_API_KEY in .env.local to enable ORIN.
+								Set GROQ_API_KEY on the server (.env.local for `vercel dev`, project settings on Vercel)
+								to enable ORIN.
 							</span>
 						)}
 

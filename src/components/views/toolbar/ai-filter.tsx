@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { runFilterAgent } from "@/lib/ai/filter-agent";
-import { isAiConfigured } from "@/lib/ai/groq";
+import { useAiConfigured } from "@/components/assistance/use-ai-configured";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "@/store/use-app-store";
 import type { ViewSettingsController } from "@/store/use-view-settings";
@@ -25,6 +25,7 @@ export function AiFilter({
 	const [error, setError] = useState<string | null>(null);
 	const [explanation, setExplanation] = useState<string | null>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const aiReady = useAiConfigured();
 
 	useEffect(() => {
 		if (open) inputRef.current?.focus();
@@ -49,7 +50,7 @@ export function AiFilter({
 		}
 	};
 
-	if (!isAiConfigured()) return null;
+	if (!aiReady) return null;
 
 	return (
 		<div className="flex items-center gap-1">

@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react";
 import { extractActions } from "@/lib/ai/actions";
 import { ASSISTANT_SYSTEM_PROMPT, type BoardContext, serializeBoard } from "@/lib/ai/context";
-import { type ChatMessage, isAiConfigured, streamChat } from "@/lib/ai/groq";
+import { type ChatMessage, streamChat } from "@/lib/ai/groq";
 import { assistantId, useAssistantStore } from "@/store/use-assistant-store";
 
 export function useOrin(context: BoardContext | null) {
@@ -34,14 +34,6 @@ export function useOrin(context: BoardContext | null) {
 				createdAt: new Date().toISOString(),
 			});
 			store.setStreamingMessageId(replyId);
-
-			if (!isAiConfigured()) {
-				store.updateMessage(threadId, replyId, {
-					error: "No Groq API key found. Add VITE_GROQ_API_KEY to .env.local and restart the dev server.",
-				});
-				store.setStreamingMessageId(null);
-				return;
-			}
 
 			const messages: ChatMessage[] = [
 				{ role: "system", content: ASSISTANT_SYSTEM_PROMPT },

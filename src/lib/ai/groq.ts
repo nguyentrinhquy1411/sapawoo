@@ -10,38 +10,38 @@ export interface StreamOptions {
 	temperature?: number;
 }
 
-const ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
+const CHAT_ENDPOINT = "/api/chat";
 
-export function groqApiKey() {
-	return import.meta.env.VITE_GROQ_API_KEY as string | undefined;
-}
+let configuredPromise: Promise<boolean> | null = null;
 
-export function groqModel() {
-	return (import.meta.env.VITE_GROQ_MODEL as string | undefined) ?? "openai/gpt-oss-120b";
-}
-
-export function isAiConfigured() {
-	return Boolean(groqApiKey());
-}
-
-function reasoningParams() {
-	return groqModel().includes("gpt-oss") ? { reasoning_effort: "low", reasoning_format: "hidden" } : {};
+export function aiConfigured() {
+	if (!configuredPromise) {
+		configuredPromise = fetch(CHAT_ENDPOINT)
+			.then((response) => (response.ok ? response.json() : { configured: false }))
+			.then((data) => Boolean(data.configured))
+			.catch(() => false);
+	}
+	return configuredPromise;
 }
 
 async function request(body: Record<string, unknown>, signal?: AbortSignal) {
-	const apiKey = groqApiKey();
-	if (!apiKey) throw new Error("Missing VITE_GROQ_API_KEY");
-
-	const response = await fetch(ENDPOINT, {
+	const response = await fetch(CHAT_ENDPOINT, {
 		method: "POST",
-		headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-		body: JSON.stringify({ model: groqModel(), ...reasoningParams(), ...body }),
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(body),
 		signal,
 	});
 
 	if (!response.ok) {
 		const detail = await response.text();
-		throw new Error(`Groq request failed (${response.status}): ${detail.slice(0, 200)}`);
+		try {
+			const parsed = JSON.parse(detail) as { error?: string | { message?: string } };
+			const message = typeof parsed.error === "string" ? parsed.error : parsed.error?.message;
+			if (message) throw new Error(message);
+		} catch (issue) {
+			if (issue instanceof Error && issue.message) throw issue;
+		}
+		throw new Error(`Assistant request failed (${response.status})`);
 	}
 
 	return response;
@@ -50,7 +50,7 @@ async function request(body: Record<string, unknown>, signal?: AbortSignal) {
 export async function streamChat({ messages, signal, onToken, temperature = 0.4 }: StreamOptions) {
 	const response = await request({ messages, temperature, stream: true }, signal);
 	const reader = response.body?.getReader();
-	if (!reader) throw new Error("Groq returned an empty stream");
+	if (!reader) throw new Error("The assistant returned an empty stream");
 
 	const decoder = new TextDecoder();
 	let buffer = "";
