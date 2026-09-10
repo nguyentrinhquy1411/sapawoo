@@ -83,7 +83,10 @@ function TaskDetailContent({ task, onClose }: { task: Task; onClose: () => void 
 					value={summary}
 					onChange={(event) => setSummary(event.target.value)}
 					onBlur={() => updateTask(task.id, { summary: summary.trim() || task.summary })}
-					className="h-auto border-0 bg-transparent px-0 text-lg font-semibold shadow-none focus-visible:ring-0"
+					onKeyDown={(event) => {
+						if (event.key === "Enter") event.currentTarget.blur();
+					}}
+					className="h-auto rounded-md border-0 bg-transparent px-1 text-lg font-semibold shadow-none transition-colors hover:bg-accent focus-visible:bg-card focus-visible:ring-2"
 				/>
 			</DialogHeader>
 

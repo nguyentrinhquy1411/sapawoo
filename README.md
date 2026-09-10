@@ -53,6 +53,22 @@ priority, delete).
 **Task detail** — dialog with summary, description, status, priority, due date, multi-assignee toggle,
 comments and delete.
 
+**ORIN (AI assistant)** — a floating launcher that opens as a docked side panel, a floating panel or a
+full-screen page at `/assistance`. Threads and layout are remembered; each reply streams token by token.
+ORIN reads the board you are looking at (statuses, members, every task with status, priority, assignees
+and due date) and answers with task keys. When you ask it to change the board it does not act silently —
+it returns a **proposed-changes card** listing each create/update/delete, which you review and apply
+yourself. Suggested prompts cover risks and blockers, a status update and sprint planning.
+
+**AI filter** — the toolbar's *AI filter* takes plain language ("overdue work assigned to An that is not
+done") and turns it into the same status / assignee / priority / due-date filters you can set by hand,
+so the result is transparent and editable as chips.
+
+Both run on the [Groq](https://groq.com) API from the browser. Copy `.env.example` to `.env.local` and
+set `VITE_GROQ_API_KEY` (and optionally `VITE_GROQ_MODEL`, default `openai/gpt-oss-120b`). Without a key
+the assistant explains what is missing and the AI filter button stays hidden. **The key ships in the
+client bundle** — fine for a local demo, not for anything public.
+
 **Settings** — workspace (name, subdomain, icon), appearance, member list, export JSON and reset demo
 data. Per board: general (name, key, description, color), status editor (rename, recategorise, reorder,
 delete with reassignment) and a confirm-to-delete danger zone.
@@ -80,12 +96,13 @@ audit log, imports, realtime sync, gantt/scheduler/calendar views, i18n, soft de
 ```
 src/
 ├── components/
+│   ├── assistance/ ORIN launcher, panel, thread, composer, proposed-changes card
 │   ├── dnd/        drop indicator
 │   ├── layout/     app shell, sidebar, top bar
 │   ├── task/       task card, task detail dialog, priority + assignee primitives
 │   ├── ui/         local shadcn-style primitives over Radix
 │   └── views/      toolbar/ (search, filters, sorts, group-by, display, chips), kanban/, table/
-├── lib/            rank, task-query (filter/sort/group), dnd payloads, view-settings defaults, seed
+├── lib/            ai/ (groq client, board context, actions, filter agent), rank, task-query (filter/sort/group), dnd payloads, view-settings defaults, seed
 ├── routes/         dashboard, boards, board detail, board settings, settings
 ├── store/          zustand app store (persisted) + ui store + view-settings hook + selectors
 └── types/
@@ -93,9 +110,10 @@ src/
 
 ## Tests
 
-`npm run test` runs three suites: smoke tests that render the real router at `/`, `/boards` and both
-board views; unit tests for the store (sequence numbers, ranking, cascade delete); and unit tests for
-filtering, sorting, grouping and drop-target maths.
+`npm run test` runs four suites: smoke tests that render the real router at `/`, `/boards` and both
+board views; unit tests for the store (sequence numbers, ranking, cascade delete); unit tests for
+filtering, sorting, grouping and drop-target maths; and unit tests for the assistant's action parsing
+and for applying its proposed changes to the store.
 
 ## Theme
 

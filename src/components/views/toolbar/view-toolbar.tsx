@@ -1,5 +1,6 @@
 import { ChevronsDownUp, ChevronsUpDown, Plus } from "lucide-react";
 import type { ReactNode } from "react";
+import { AiFilter } from "@/components/views/toolbar/ai-filter";
 import { AvatarFilter } from "@/components/views/toolbar/avatar-filter";
 import { DisplayMenu } from "@/components/views/toolbar/display-menu";
 import { FiltersMenu } from "@/components/views/toolbar/filters-menu";
@@ -47,6 +48,7 @@ export function ViewToolbar({
 					value={settings.filters.search}
 					onChange={(search) => patchFilters({ search })}
 				/>
+				<AiFilter controller={controller} statuses={statuses} />
 				<FiltersMenu controller={controller} statuses={statuses} />
 				<SortsMenu controller={controller} />
 				<GroupByMenu controller={controller} app={app} />

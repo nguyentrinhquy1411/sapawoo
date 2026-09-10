@@ -9,11 +9,12 @@ import {
 	extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import dayjs from "dayjs";
-import { AlignLeft, CalendarDays, Copy, Link2, MessageSquare, MoreHorizontal, Trash2 } from "lucide-react";
+import { AlignLeft, CalendarDays, Copy, Link2, MessageSquare, MoreHorizontal, PenLine, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AssigneeGroup } from "@/components/task/assignee-avatar";
 import { PriorityIcon } from "@/components/task/priority-badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -48,8 +49,11 @@ export function TaskCardBody({
 	);
 	const duplicateTask = useAppStore((state) => state.duplicateTask);
 	const deleteTask = useAppStore((state) => state.deleteTask);
+	const updateTask = useAppStore((state) => state.updateTask);
 	const openTask = useUiStore((state) => state.openTask);
 	const doneStatusIds = useDoneStatusIds();
+	const [renaming, setRenaming] = useState(false);
+	const [draft, setDraft] = useState(task.summary);
 
 	const assignees = useMemo(
 		() => users.filter((user) => task.assigneeIds.includes(user.id)),
@@ -68,9 +72,32 @@ export function TaskCardBody({
 			)}
 		>
 			<div className="flex items-start justify-between gap-2">
-				<span className={cn("font-medium leading-snug", compact ? "line-clamp-1 text-xs" : "line-clamp-3 text-sm")}>
-					{task.summary}
-				</span>
+				{renaming ? (
+					<Input
+						autoFocus
+						value={draft}
+						className="h-7 flex-1 text-sm"
+						onClick={(event) => event.stopPropagation()}
+						onPointerDown={(event) => event.stopPropagation()}
+						onChange={(event) => setDraft(event.target.value)}
+						onBlur={() => {
+							if (draft.trim()) updateTask(task.id, { summary: draft.trim() });
+							else setDraft(task.summary);
+							setRenaming(false);
+						}}
+						onKeyDown={(event) => {
+							if (event.key === "Enter") event.currentTarget.blur();
+							if (event.key === "Escape") {
+								setDraft(task.summary);
+								setRenaming(false);
+							}
+						}}
+					/>
+				) : (
+					<span className={cn("font-medium leading-snug", compact ? "line-clamp-1 text-xs" : "line-clamp-3 text-sm")}>
+						{task.summary}
+					</span>
+				)}
 				<div className="flex shrink-0 items-center gap-1">
 					{shows("priority") && priority && <PriorityIcon priority={priority} className="mt-0.5" />}
 					<DropdownMenu>
@@ -89,6 +116,15 @@ export function TaskCardBody({
 							<DropdownMenuItem onSelect={() => openTask(task.id)}>
 								<Link2 />
 								<span>Open task</span>
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								onSelect={() => {
+									setDraft(task.summary);
+									setRenaming(true);
+								}}
+							>
+								<PenLine />
+								<span>Rename</span>
 							</DropdownMenuItem>
 							<DropdownMenuItem onSelect={() => navigator.clipboard?.writeText(taskKey(task))}>
 								<Copy />

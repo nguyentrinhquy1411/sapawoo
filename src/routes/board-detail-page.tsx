@@ -1,7 +1,8 @@
 import { Link, useParams, useSearch } from "@tanstack/react-router";
 import { LayoutGrid, Settings, SlidersHorizontal, Star, Table2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { TopBar } from "@/components/layout/top-bar";
+import { CreateTaskDialog } from "@/components/task/create-task-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { KanbanView } from "@/components/views/kanban/kanban-view";
@@ -12,7 +13,6 @@ import { buildGroups, filterTasks } from "@/lib/task-query";
 import { cn } from "@/lib/utils";
 import { useBoardByKey, useBoardTasks, useQueryContext } from "@/store/selectors";
 import { useAppStore } from "@/store/use-app-store";
-import { useUiStore } from "@/store/use-ui-store";
 import { useViewSettings } from "@/store/use-view-settings";
 import type { BoardApp } from "@/types";
 
@@ -30,8 +30,7 @@ export function BoardDetailPage() {
 	const allTasks = useBoardTasks(board?.id);
 	const context = useQueryContext(board?.id);
 	const toggleStar = useAppStore((state) => state.toggleStar);
-	const createTask = useAppStore((state) => state.createTask);
-	const openTask = useUiStore((state) => state.openTask);
+	const [createOpen, setCreateOpen] = useState(false);
 
 	const controller = useViewSettings(`${board?.id ?? "none"}-view-${app}`, app);
 	const { settings } = controller;
@@ -59,13 +58,6 @@ export function BoardDetailPage() {
 			</>
 		);
 	}
-
-	const handleCreateTask = () => {
-		const statusId = context.statuses[0]?.id;
-		if (!statusId) return;
-		const created = createTask({ boardId: board.id, statusId, summary: "Untitled task", atTop: true });
-		if (created) openTask(created.id);
-	};
 
 	return (
 		<>
@@ -118,7 +110,7 @@ export function BoardDetailPage() {
 				controller={controller}
 				statuses={context.statuses}
 				groups={groups}
-				onCreateTask={handleCreateTask}
+				onCreateTask={() => setCreateOpen(true)}
 			/>
 
 			<FilterChips
@@ -126,6 +118,13 @@ export function BoardDetailPage() {
 				statuses={context.statuses}
 				shown={tasks.length}
 				total={allTasks.length}
+			/>
+
+			<CreateTaskDialog
+				board={board}
+				statuses={context.statuses}
+				open={createOpen}
+				onOpenChange={setCreateOpen}
 			/>
 
 			<div className="min-h-0 flex-1 overflow-auto">

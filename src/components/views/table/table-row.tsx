@@ -9,7 +9,7 @@ import {
 	extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import dayjs from "dayjs";
-import { Copy, GripVertical, MessageSquare, MoreHorizontal, Trash2 } from "lucide-react";
+import { Copy, GripVertical, Maximize2, MessageSquare, MoreHorizontal, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { PriorityIcon } from "@/components/task/priority-badge";
 import { Button } from "@/components/ui/button";
@@ -159,10 +159,10 @@ export function TaskTableRow({ task, groupId, statuses, visibleFields, density }
 				) : (
 					<div className="flex items-center gap-2">
 						<Button
-							variant="link"
-							className="h-auto min-w-0 justify-start p-0 text-left font-medium text-foreground"
-							onClick={() => openTask(task.id)}
-							onDoubleClick={() => setEditing(true)}
+							variant="ghost"
+							className="h-7 min-w-0 flex-1 justify-start rounded-md px-1 text-left font-medium text-foreground hover:bg-accent"
+							title="Click to rename"
+							onClick={() => setEditing(true)}
 						>
 							<span className="truncate">{task.summary}</span>
 						</Button>
@@ -172,6 +172,15 @@ export function TaskTableRow({ task, groupId, statuses, visibleFields, density }
 								<span>{commentCount}</span>
 							</span>
 						)}
+						<Button
+							variant="ghost"
+							size="icon-sm"
+							className="shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
+							title="Open task"
+							onClick={() => openTask(task.id)}
+						>
+							<Maximize2 className="size-3.5" />
+						</Button>
 					</div>
 				)}
 			</td>

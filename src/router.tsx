@@ -2,6 +2,7 @@ import { createRootRoute, createRoute, createRouter } from "@tanstack/react-rout
 import { AppShell } from "@/components/layout/app-shell";
 import { BoardDetailPage } from "@/routes/board-detail-page";
 import { BoardsPage } from "@/routes/boards-page";
+import { AssistancePage } from "@/routes/assistance-page";
 import { BoardSettingsPage } from "@/routes/board-settings-page";
 import { DashboardPage } from "@/routes/dashboard-page";
 import { SettingsPage } from "@/routes/settings-page";
@@ -36,13 +37,19 @@ const boardSettingsRoute = createRoute({
 	component: BoardSettingsPage,
 });
 
+const assistanceRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/assistance",
+	component: AssistancePage,
+});
+
 const settingsRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: "/settings",
 	component: SettingsPage,
 });
 
-export const routeTree = rootRoute.addChildren([dashboardRoute, boardsRoute, boardDetailRoute, boardSettingsRoute, settingsRoute]);
+export const routeTree = rootRoute.addChildren([dashboardRoute, boardsRoute, boardDetailRoute, boardSettingsRoute, settingsRoute, assistanceRoute]);
 
 export const router = createRouter({ routeTree });
 

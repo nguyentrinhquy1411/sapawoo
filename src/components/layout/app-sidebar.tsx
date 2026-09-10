@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, Layers, Settings, Star } from "lucide-react";
+import { LayoutDashboard, Layers, Settings, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,7 @@ import { useAppStore } from "@/store/use-app-store";
 const NAV_ITEMS = [
 	{ to: "/", label: "Dashboard", icon: LayoutDashboard },
 	{ to: "/boards", label: "Boards", icon: Layers },
+	{ to: "/assistance", label: "ORIN", icon: Sparkles },
 	{ to: "/settings", label: "Settings", icon: Settings },
 ];
 
