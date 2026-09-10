@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { useEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { AssistanceThread } from "@/components/assistance/assistance-thread";
-import { OrinLogo } from "@/components/assistance/orin-logo";
+import { SapaLogo } from "@/components/assistance/assistant-logo";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -31,11 +31,11 @@ export function AssistanceLauncher() {
 						{open ? (
 							<X className="size-5 text-primary" />
 						) : (
-							<OrinLogo className="size-6 text-primary" />
+							<SapaLogo className="size-6 text-primary" />
 						)}
 					</Button>
 				</TooltipTrigger>
-				<TooltipContent side="left">{open ? "Close ORIN" : "Ask ORIN"}</TooltipContent>
+				<TooltipContent side="left">{open ? "Close Sapa" : "Ask Sapa"}</TooltipContent>
 			</Tooltip>
 		</div>
 	);

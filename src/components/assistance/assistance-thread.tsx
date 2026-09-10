@@ -14,9 +14,9 @@ import { AssistanceComposer } from "@/components/assistance/assistance-composer"
 import { AssistanceHistory } from "@/components/assistance/assistance-sidebar";
 import { AssistanceMessageItem } from "@/components/assistance/assistance-message";
 import { BoardContextBar } from "@/components/assistance/board-context-bar";
-import { OrinLogo } from "@/components/assistance/orin-logo";
+import { SapaLogo } from "@/components/assistance/assistant-logo";
 import { useCurrentBoardContext } from "@/components/assistance/use-board-context";
-import { useOrin } from "@/components/assistance/use-orin";
+import { useSapa } from "@/components/assistance/use-assistant";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useAiConfigured } from "@/components/assistance/use-ai-configured";
@@ -53,7 +53,7 @@ interface AssistanceThreadProps {
 
 export function AssistanceThread({ showHistory = false, onClose, className, fullscreen }: AssistanceThreadProps) {
 	const context = useCurrentBoardContext();
-	const { send, stop, isStreaming } = useOrin(context);
+	const { send, stop, isStreaming } = useSapa(context);
 	const threads = useAssistantStore((state) => state.threads);
 	const activeThreadId = useAssistantStore((state) => state.activeThreadId);
 	const streamingMessageId = useAssistantStore((state) => state.streamingMessageId);
@@ -81,9 +81,9 @@ export function AssistanceThread({ showHistory = false, onClose, className, full
 			<div className="flex min-w-0 flex-1 flex-col">
 				<div className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-3">
 					<span className="flex size-7 items-center justify-center rounded-lg bg-ai-gradient text-primary-foreground">
-						<OrinLogo className="size-4" />
+						<SapaLogo className="size-4" />
 					</span>
-					<span className="text-sm font-semibold">ORIN</span>
+					<span className="text-sm font-semibold">Sapa</span>
 
 					<div className="ml-auto flex items-center gap-0.5">
 						{!showHistory && (
@@ -159,7 +159,7 @@ export function AssistanceThread({ showHistory = false, onClose, className, full
 								<div className="flex flex-1 flex-col justify-end gap-3">
 									<div className="flex flex-col items-center gap-2 py-6 text-center">
 										<span className="flex size-11 items-center justify-center rounded-2xl bg-ai-gradient animate-ai-shimmer text-primary-foreground">
-											<OrinLogo className="size-6" />
+											<SapaLogo className="size-6" />
 										</span>
 										<span className="text-sm font-semibold">How can I help?</span>
 										<span className="max-w-xs text-xs text-muted-foreground">
@@ -198,7 +198,7 @@ export function AssistanceThread({ showHistory = false, onClose, className, full
 						{aiReady === false && (
 							<span className="shrink-0 border-t border-border bg-destructive/10 px-3 py-2 text-[11px] text-destructive">
 								Set GROQ_API_KEY on the server (.env.local for `vercel dev`, project settings on Vercel)
-								to enable ORIN.
+								to enable Sapa.
 							</span>
 						)}
 

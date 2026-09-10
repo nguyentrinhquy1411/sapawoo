@@ -8,7 +8,7 @@ export function AssistancePage() {
 	return (
 		<>
 			<TopBar
-				title="ORIN"
+				title="Sapa"
 				subtitle="Ask about your boards, review the changes it proposes"
 				actions={
 					<Button asChild variant="outline" size="sm" className="gap-1.5">

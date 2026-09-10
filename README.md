@@ -53,9 +53,9 @@ priority, delete).
 **Task detail** — dialog with summary, description, status, priority, due date, multi-assignee toggle,
 comments and delete.
 
-**ORIN (AI assistant)** — a floating launcher that opens as a docked side panel, a floating panel or a
+**Sapa (AI assistant)** — a floating launcher that opens as a docked side panel, a floating panel or a
 full-screen page at `/assistance`. Threads and layout are remembered; each reply streams token by token.
-ORIN reads the board you are looking at (statuses, members, every task with status, priority, assignees
+Sapa reads the board you are looking at (statuses, members, every task with status, priority, assignees
 and due date) and answers with task keys. When you ask it to change the board it does not act silently —
 it returns a **proposed-changes card** listing each create/update/delete, which you review and apply
 yourself. Suggested prompts cover risks and blockers, a status update and sprint planning.
@@ -100,7 +100,7 @@ audit log, imports, realtime sync, gantt/scheduler/calendar views, i18n, soft de
 api/             serverless Groq proxy (chat + configured check), shared by `vercel dev` and Vite
 src/
 ├── components/
-│   ├── assistance/ ORIN launcher, panel, thread, composer, proposed-changes card
+│   ├── assistance/ Sapa launcher, panel, thread, composer, proposed-changes card
 │   ├── dnd/        drop indicator
 │   ├── layout/     app shell, sidebar, top bar
 │   ├── task/       task card, task detail dialog, priority + assignee primitives

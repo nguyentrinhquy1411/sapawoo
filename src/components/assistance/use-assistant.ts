@@ -4,7 +4,7 @@ import { ASSISTANT_SYSTEM_PROMPT, type BoardContext, serializeBoard } from "@/li
 import { type ChatMessage, streamChat } from "@/lib/ai/groq";
 import { assistantId, useAssistantStore } from "@/store/use-assistant-store";
 
-export function useOrin(context: BoardContext | null) {
+export function useSapa(context: BoardContext | null) {
 	const abortRef = useRef<AbortController | null>(null);
 	const streamingMessageId = useAssistantStore((state) => state.streamingMessageId);
 

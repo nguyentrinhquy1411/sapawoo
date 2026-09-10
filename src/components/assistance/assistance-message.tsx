@@ -2,7 +2,7 @@ import { CircleAlert, User } from "lucide-react";
 import type { BoardContext } from "@/lib/ai/context";
 import { AssistanceConfirmationCard } from "@/components/assistance/assistance-confirmation-card";
 import { MarkdownLite } from "@/components/assistance/markdown-lite";
-import { OrinLogo } from "@/components/assistance/orin-logo";
+import { SapaLogo } from "@/components/assistance/assistant-logo";
 import { cn } from "@/lib/utils";
 import { type AssistantMessage, useAssistantStore } from "@/store/use-assistant-store";
 
@@ -28,7 +28,7 @@ export function AssistanceMessageItem({
 					isUser ? "bg-secondary text-secondary-foreground" : "bg-ai-gradient text-primary-foreground",
 				)}
 			>
-				{isUser ? <User className="size-3.5" /> : <OrinLogo className="size-3.5" />}
+				{isUser ? <User className="size-3.5" /> : <SapaLogo className="size-3.5" />}
 			</span>
 
 			<div className={cn("flex min-w-0 flex-col gap-2", isUser ? "items-end" : "items-start", "flex-1")}>

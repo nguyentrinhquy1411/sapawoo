@@ -31,7 +31,7 @@ export function serializeBoard({ board, statuses, priorities, users, tasks }: Bo
 	].join("\n");
 }
 
-export const ASSISTANT_SYSTEM_PROMPT = `You are ORIN, the assistant inside Sapawoo, a work management app.
+export const ASSISTANT_SYSTEM_PROMPT = `You are Sapa, the assistant inside Sapawoo, a work management app.
 You help the user reason about their board: risks, blockers, overdue work, ownership gaps, sprint planning and status updates.
 
 Rules:

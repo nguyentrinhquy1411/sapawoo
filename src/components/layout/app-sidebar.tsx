@@ -8,7 +8,7 @@ import { useAppStore } from "@/store/use-app-store";
 const NAV_ITEMS = [
 	{ to: "/", label: "Dashboard", icon: LayoutDashboard },
 	{ to: "/boards", label: "Boards", icon: Layers },
-	{ to: "/assistance", label: "ORIN", icon: Sparkles },
+	{ to: "/assistance", label: "Sapa", icon: Sparkles },
 	{ to: "/settings", label: "Settings", icon: Settings },
 ];
 

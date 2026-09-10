@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 
-export function OrinLogo({ className }: { className?: string }) {
+export function SapaLogo({ className }: { className?: string }) {
 	return (
 		<svg viewBox="0 0 24 24" fill="none" className={cn("size-5", className)} aria-hidden="true">
-			<title>ORIN</title>
+			<title>Sapa</title>
 			<path
 				d="M12 2.5c.5 3.2 2.3 5 5.5 5.5-3.2.5-5 2.3-5.5 5.5-.5-3.2-2.3-5-5.5-5.5 3.2-.5 5-2.3 5.5-5.5Z"
 				fill="currentColor"
