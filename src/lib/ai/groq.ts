@@ -24,6 +24,10 @@ export function isAiConfigured() {
 	return Boolean(groqApiKey());
 }
 
+function reasoningParams() {
+	return groqModel().includes("gpt-oss") ? { reasoning_effort: "low", reasoning_format: "hidden" } : {};
+}
+
 async function request(body: Record<string, unknown>, signal?: AbortSignal) {
 	const apiKey = groqApiKey();
 	if (!apiKey) throw new Error("Missing VITE_GROQ_API_KEY");
@@ -31,7 +35,7 @@ async function request(body: Record<string, unknown>, signal?: AbortSignal) {
 	const response = await fetch(ENDPOINT, {
 		method: "POST",
 		headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-		body: JSON.stringify({ model: groqModel(), ...body }),
+		body: JSON.stringify({ model: groqModel(), ...reasoningParams(), ...body }),
 		signal,
 	});
 
